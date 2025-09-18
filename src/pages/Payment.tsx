@@ -3,10 +3,32 @@ import { ArrowRight, CreditCard, Smartphone, Building, QrCode, CheckCircle } fro
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Payment = () => {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleCompletePayment = () => {
+    if (!selectedMethod) return;
+    
+    toast({
+      title: "Payment Processing",
+      description: "Your payment is being processed...",
+    });
+
+    // Simulate payment processing
+    setTimeout(() => {
+      toast({
+        title: "Payment Successful!",
+        description: "Your Robux will be delivered to your account shortly.",
+      });
+      navigate('/orders');
+    }, 2000);
+  };
 
   const paymentMethods = [
     {
@@ -183,6 +205,7 @@ const Payment = () => {
                     className="w-full"
                     variant="hero"
                     disabled={!selectedMethod}
+                    onClick={handleCompletePayment}
                   >
                     Complete Payment
                     <ArrowRight className="w-4 h-4 ml-2" />
